@@ -17,7 +17,7 @@ from datasets.cuhkpedes import CUHKPEDES
 from datasets.rstpreid import RSTPReid
 
 
-config_file  = 'logs/RSTPReid/20241106_175312_finetune/configs.yaml'
+config_file  = ''
 args = load_train_configs(config_file)
 args.batch_size = 1024
 args.training = False
@@ -36,7 +36,7 @@ gfeats = F.normalize(gfeats, p=2, dim=1) # image features
 
 similarity = qfeats @ gfeats.t()
 
-simi = torch.tensor(0.8).to(device) * similarity + torch.tensor(0.2).to(device) * prob_similarity.to(device)
+simi = torch.tensor(0.9).to(device) * similarity + torch.tensor(0.1).to(device) * prob_similarity.to(device)
 
 # acclerate sort with topk
 _, indices = torch.topk(simi, k=10, dim=1, largest=True, sorted=True)  # q * topk
@@ -81,4 +81,5 @@ for i in range(len(qids)):
 # 读取并解析JSON文件
 import json 
 with open('test.json', 'w') as file:
+
     json.dump(test_file,file)
