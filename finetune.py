@@ -2,7 +2,7 @@ import collections
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 import os.path as op
-from model.build_finetune4 import build_finetune_model
+from model.build_finetune import build_finetune_model
 import torch
 import numpy as np
 import random
@@ -67,7 +67,7 @@ if __name__ == '__main__':
             del param_dict[k]
         model.load_state_dict(param_dict, False)
                 
-        # clip_model3 额外加载部分参数  均值预测加载预训练参数
+        # Mean Load Pretrain
         new_state_dict_for_mu = {}
         for old_name, param in param_dict.items():
             if 'base_model.visual.transformer.resblocks.11' in old_name:
@@ -77,17 +77,6 @@ if __name__ == '__main__':
                 new_name = old_name.replace('resblocks.11', 'mu_resblocks')
                 new_state_dict_for_mu[new_name] = param
         model.load_state_dict(new_state_dict_for_mu, False)
-
-        # 方差是是否加载预训练参数 不加载效果好
-        # new_state_dict_for_sigma = {}
-        # for old_name, param in param_dict.items():
-        #     if 'base_model.visual.transformer.resblocks.11' in old_name:
-        #         new_name = old_name.replace('resblocks.11', 'logsigma_resblocks')
-        #         new_state_dict_for_sigma[new_name] = param
-        #     if 'base_model.transformer.resblocks.11' in old_name:
-        #         new_name = old_name.replace('resblocks.11', 'logsigma_resblocks')
-        #         new_state_dict_for_sigma[new_name] = param
-        # model.load_state_dict(new_state_dict_for_sigma, False)
 
     model.cuda()
     # model = nn.DataParallel(model)
