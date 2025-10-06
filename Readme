@@ -2,7 +2,7 @@ Code and Dataset of paper "Cross-modal Person Retrieval with One-to-Many Relatio
 
 # Methods
 "
-![image]((https://github.com/Yifei-AHU/OMRE/blob/main/Images/Fig2.png?raw=true))
+![image](Images/Fig2.png)
 "
 # Training
 Our code borrows partially from IRRA and NAM. \
