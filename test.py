@@ -24,7 +24,7 @@ if __name__ == '__main__':
     args = load_train_configs(args.config_file)
 
     args.training = False
-    logger = setup_logger('IRRA', save_dir=args.output_dir, if_train=args.training)
+    logger = setup_logger('OMRE', save_dir=args.output_dir, if_train=args.training)
     logger.info(args)
     device = "cuda:0"
 
