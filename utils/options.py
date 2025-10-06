@@ -13,9 +13,7 @@ def get_args():
     parser.add_argument("--resume", default=False, action='store_true')
     parser.add_argument("--resume_ckpt_file", default="", help='resume from ...')
 
-    # logs/RSTPReid/20240903_094627_finetune RDSR在的训练结果和模型
-    parser.add_argument("--finetune", type=str, default="/data/dengyifei/Project/MPCNet/pretrain/best1.pth") #   /data/dengyifei/Project/MPCNet/pretrain/best2.pth  logs/RSTPReid/20241106_175312_finetune/best0.pth
-    parser.add_argument("--pretrain", type=str, default="")
+    parser.add_argument("--finetune", type=str, default="") # The path of pretrain weights.
     parser.add_argument("--nam", default=False, action='store_true')
 
     ######################## model general settings ########################
@@ -68,7 +66,7 @@ def get_args():
     parser.add_argument("--dataset_name", default="CUHK-PEDES", help="[CUHK-PEDES, ICFG-PEDES, RSTPReid]")
     parser.add_argument("--sampler", default="random", help="choose sampler from [idtentity, random]")
     parser.add_argument("--num_instance", type=int, default=2)
-    parser.add_argument("--root_dir", default="/data/dengyifei/Data/")
+    parser.add_argument("--root_dir", default="") # The path of datasets.
     parser.add_argument("--batch_size", type=int, default=128)
     parser.add_argument("--test_batch_size", type=int, default=512)
     parser.add_argument("--num_workers", type=int, default=8)
@@ -79,7 +77,7 @@ def get_args():
     parser.add_argument("--sample_num", default=3)
     parser.add_argument("--sample_cross_text_num", default=1)
     parser.add_argument("--mu_num", default=1)
-    parser.add_argument("--img_margin_value", default=300) # CUHK RSTP 300 ICFG 200
+    parser.add_argument("--img_margin_value", default=300) 
     parser.add_argument("--text_margin_value", default=300)
     parser.add_argument("--margin_weight", default=0.1)
 
