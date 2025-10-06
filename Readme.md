@@ -1,0 +1,13 @@
+Code and Dataset of paper "Cross-modal Person Retrieval with One-to-Many Relation Modeling"
+
+# Methods
+![image](https://github.com/Yifei-AHU/RGBT-PEDE/blob/main/images/Fig2.png?raw=true)
+
+# Training
+Our code borrows partially from IRRA and NAM. \
+we use single RTX4090 24G GPU for training and evaluation.
+
+# Testing
+```
+python test.py --config_file 'path/to/model_dir/configs.yaml'
+```
