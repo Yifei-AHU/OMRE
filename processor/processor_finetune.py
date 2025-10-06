@@ -58,19 +58,10 @@ def do_train(start_epoch, args, model, train_loader, evaluator0, optimizer,
             batch_size = batch['images'].shape[0]
             
             meters['loss'].update(total_loss.item(), batch_size)
-            meters['sdm_loss'].update(ret.get('sdm_loss', 0), batch_size)
-            meters['sdm_loss_v6'].update(ret.get('sdm_loss_v6', 0), batch_size)
-            meters['mmd_loss'].update(ret.get('mmd_loss', 0), batch_size)
-            meters['triplet_loss'].update(ret.get('triplet_loss', 0), batch_size)
-            meters['margin_loss'].update(ret.get('margin_loss', 0), batch_size)
-            meters['diversity_loss'].update(ret.get('diversity_loss', 0), batch_size)
-            meters['itc_loss'].update(ret.get('itc_loss', 0), batch_size)
-            meters['id_loss'].update(ret.get('id_loss', 0), batch_size)
-            meters['mlm_loss'].update(ret.get('mlm_loss', 0), batch_size)
-
-            meters['img_acc'].update(ret.get('img_acc', 0), batch_size)
-            meters['txt_acc'].update(ret.get('txt_acc', 0), batch_size)
-            meters['mlm_acc'].update(ret.get('mlm_acc', 0), 1)
+            meters['boma_loss'].update(ret.get('boma_loss', 0), batch_size)
+            meters['reg_loss'].update(ret.get('reg_loss', 0), batch_size)
+            meters['hnm_loss'].update(ret.get('hnm_loss', 0), batch_size)
+            meters['crsr_loss'].update(ret.get('crsr_loss', 0), batch_size)
 
             optimizer.zero_grad()
             total_loss.backward()
