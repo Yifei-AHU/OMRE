@@ -1,5 +1,5 @@
 from model import objectives
-from .clip_model3 import ResidualAttentionBlock, ResidualCrossAttentionBlock, Transformer, Transformer2, QuickGELU, LayerNorm, build_CLIP_from_openai_pretrained, convert_weights
+from .clip_model import ResidualAttentionBlock, ResidualCrossAttentionBlock, Transformer, Transformer2, QuickGELU, LayerNorm, build_CLIP_from_openai_pretrained, convert_weights
 import numpy as np
 import torch
 import torch.nn as nn
@@ -21,9 +21,7 @@ class OMRE(nn.Module):
 
         if self.gaussian:
             self.sample_num = args.sample_num # 
-            self.mu_num = args.mu_num # 1
-            self.margin = args.margin_loss
-            self.margin_value = args.margin_value # 300
+            self.mu_num = args.mu_num 
             self.margin_weight = args.margin_weight
 
         if 'crsr' in args.loss_names:
@@ -138,14 +136,13 @@ class OMRE(nn.Module):
         logit_scale = self.logit_scale
 
         if self.gaussian:
-            # 全部的token
             image_embeds, img_mu, img_sigma = self.img_gaussian_modeling(image_mu, img_sigma)
             mlm_text_embeds, mlm_text_mu, mlm_text_sigma = self.text_gaussian_modeling(text_mu, text_sigma) # [b,num,77,512]
 
             image_mu_class_token = img_mu[:,0,:].float()
             text_mu_class_token = mlm_text_mu[torch.arange(mlm_text_mu.shape[0]), caption_ids.argmax(dim=-1)].float()
 
-        # 获取 采样点与均值的 class token 
+        # Class token  
         sample_image_class_embeds = image_embeds[:,:,0,:].contiguous().float() # [b,num,512]
         sample_mlm_text_class_embeds = torch.stack([mlm_text_embeds[i][torch.arange(mlm_text_embeds[i].shape[0]), caption_ids[i].argmax(dim=-1)] for i in range(mlm_text_embeds.shape[0])], dim=0).float()
 
@@ -154,7 +151,7 @@ class OMRE(nn.Module):
             ret.update({'boma_loss':boma_loss})
         
         if 'reg' in self.current_task:
-            reg_loss = objectives.compute_reg_loss(img_sigma, mlm_text_sigma, img_margin_value=400, text_margin_value=400, margin_weight=10)
+            reg_loss = objectives.compute_reg_loss(img_sigma, mlm_text_sigma, img_margin_value=self.args.img_margin_value, text_margin_value=self.args.text_margin_value, margin_weight=self.args.margin_weight)
             ret.update({'reg_loss': reg_loss}) 
         
         if 'hnm' in self.current_task: 

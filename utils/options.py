@@ -79,15 +79,10 @@ def get_args():
     parser.add_argument("--sample_num", default=3)
     parser.add_argument("--sample_cross_text_num", default=1)
     parser.add_argument("--mu_num", default=1)
-    parser.add_argument("--margin_value", default=300) # CUHK RSTP 300 ICFG 200
+    parser.add_argument("--img_margin_value", default=300) # CUHK RSTP 300 ICFG 200
     parser.add_argument("--text_margin_value", default=300)
-    parser.add_argument("--mlm_margin_value", default=500)
     parser.add_argument("--margin_weight", default=0.1)
-    parser.add_argument("--margin_loss", default=True)
-    parser.add_argument("--triplet_alpha", default=12)
-    parser.add_argument("--margin", default=0.8)
-    parser.add_argument("--point_temperature", type=float, default=0.02, help="initial temperature value, if 0, don't use temperature") 
-    
+
     args = parser.parse_args()
 
     return args
