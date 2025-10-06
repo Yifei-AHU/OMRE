@@ -43,11 +43,6 @@ def build_transforms(img_size=(384, 128), aug=False, is_train=True):
             T.Normalize(mean=mean, std=std),
             T.RandomErasing(scale=(0.02, 0.4), value=mean),
         ])
-        # transform = T.Compose([          ###########  这都是用于获取热力图的
-        #     T.Resize((height, width)),
-        #     T.ToTensor(),
-        #     T.Normalize(mean=mean, std=std),
-        # ])
     else:
         transform = T.Compose([
             T.Resize((height, width)),
@@ -156,10 +151,6 @@ def build_dataloader(args, tranforms=None):
                                     batch_size=args.batch_size,
                                     shuffle=False,
                                     num_workers=num_workers)
-        # val_txt_loader2 = DataLoader(val_txt_set2,
-        #                             batch_size=args.batch_size,
-        #                             shuffle=False,
-        #                             num_workers=num_workers)
 
         return train_loader, val_img_loader, val_txt_loader, num_classes
     else:
@@ -217,9 +208,7 @@ def build_zero_shot_loader(args, finetune=False):
     logger = logging.getLogger("IRRA.dataset")
 
     num_workers = args.num_workers
-    # dataset0 = __factory['CUHK-PEDES'](root=args.root_dir)
-    dataset1 = __factory['ICFG-PEDES'](root=args.root_dir)
-    # dataset2 = __factory['RSTPReid'](root=args.root_dir)
+    dataset = __factory['CUHK-PEDES'](root=args.root_dir)
 
     train_transforms = build_transforms(img_size=args.img_size,
                                             aug=args.img_aug,
@@ -227,22 +216,7 @@ def build_zero_shot_loader(args, finetune=False):
     val_transforms = build_transforms(img_size=args.img_size,
                                           is_train=False)
     
-    # ds = dataset0.test
-    # val_img_set = ImageDataset(ds['image_pids'], ds['img_paths'],
-    #                             val_transforms)
-    # val_txt_set = TextDataset(ds['caption_pids'],
-    #                             ds['captions'],
-    #                             text_length=args.text_length)
-    # val_img_loader = DataLoader(val_img_set,
-    #                             batch_size=args.batch_size,
-    #                             shuffle=False,
-    #                             num_workers=num_workers)
-    # val_txt_loader = DataLoader(val_txt_set,
-    #                             batch_size=args.batch_size,
-    #                             shuffle=False,
-    #                             num_workers=num_workers)
-    
-    ds = dataset1.test
+    ds = dataset.test
     val_img_set = ImageDataset(ds['image_pids'], ds['img_paths'],
                                 val_transforms)
     val_txt_set = TextDataset(ds['caption_pids'],
@@ -257,20 +231,6 @@ def build_zero_shot_loader(args, finetune=False):
                                 shuffle=False,
                                 num_workers=num_workers)
     
-    # ds = dataset2.test
-    # val_img_set = ImageDataset(ds['image_pids'], ds['img_paths'],
-    #                             val_transforms)
-    # val_txt_set = TextDataset(ds['caption_pids'],
-    #                             ds['captions'],
-    #                             text_length=args.text_length)
-    # val_img_loader = DataLoader(val_img_set,
-    #                             batch_size=args.batch_size,
-    #                             shuffle=False,
-    #                             num_workers=num_workers)
-    # val_txt_loader = DataLoader(val_txt_set,
-    #                             batch_size=args.batch_size,
-    #                             shuffle=False,
-    #                             num_workers=num_workers)
     if finetune:
         syn_dataset = __factory[args.dataset_name](root=args.root_dir)
     else:
@@ -286,14 +246,7 @@ def build_zero_shot_loader(args, finetune=False):
                                 shuffle=True,
                                 num_workers=num_workers,
                                 )
-    # train_loader = DataLoader(train_set, # v2
-    #                         batch_size=args.batch_size,
-    #                         sampler=RandomIdentitySampler(
-    #                         syn_dataset.train, args.batch_size,
-    #                         args.num_instance),
-    #                         num_workers=num_workers,
-    #                         collate_fn=collate)
-
+            
     return syn_dataset.train, train_loader, val_img_loader, val_txt_loader, num_classes
 
 def build_filter_loader(args, dataset):
