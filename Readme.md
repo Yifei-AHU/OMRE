@@ -1,11 +1,14 @@
-Code and Dataset of paper "Cross-modal Person Retrieval with One-to-Many Relation Modeling"
+Code of paper "Cross-modal Person Retrieval with One-to-Many Relation Modeling"
 
 # Methods
 ![image](Images/Fig2.png)
 
 # Training
-Our code borrows partially from IRRA and NAM. \
+Our code borrows partially from IRRA and NAM. 
 we use single RTX4090 24G GPU for training and evaluation.
+
+# Weights
+All training weights are being organized and will be released shortly.
 
 # Testing
 ```
