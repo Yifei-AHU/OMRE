@@ -154,11 +154,9 @@ def compute_hnm_loss(img_mu, text_mu, image_fetures, text_fetures, pid, margin=0
     image_fetures_norm = image_fetures_norm.view(-1, image_fetures_norm.shape[-1]) # [b*n, 512]
     text_fetures_norm = text_fetures_norm.view(-1, text_fetures_norm.shape[-1]) # [b*n, 512]
 
-    # 计算文本均值->图像采样点的相似度 文本采样点到图像均值的相似度
     i2t_m2s_simi = img_mu_norm @ text_fetures_norm.t() # [b,b*n]
     i2t_s2m_simi = image_fetures_norm @ text_mu_norm.t() # [b*n,b]
 
-    # 计算图像均值->文本采样点的相似度 图像采样点到文本均值的相似度
     t2i_m2s_simi = text_mu_norm @ image_fetures_norm.t() # [b,b*n]
     t2i_s2m_simi = text_fetures_norm @ img_mu_norm.t()  # [b*n,b]
 
@@ -182,7 +180,6 @@ def compute_hnm_loss(img_mu, text_mu, image_fetures, text_fetures, pid, margin=0
     return i2t_loss + t2i_loss
 
 def kl_divergence(mu, sigma): 
-    # return -0.5 * (1 + torch.log(sigma**2) - mu.pow(2) - sigma**2).sum() # sigma是标准差
     return -0.5 * (1 + sigma - mu.pow(2) - sigma.exp()).sum() # 原来的错误版本
 
 def compute_reg_loss(image_logsigma, text_logsigma, img_margin_value=300, text_margin_value=300, margin_weight=1): # RSTP 1  ICFG 10  v2
